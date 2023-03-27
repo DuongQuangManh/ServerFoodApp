@@ -1,0 +1,101 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
+/>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<%- include('./partials/header.ejs') %>
+<div style="min-height: 700px"></div>
+<%- include('./partials/footer.ejs') %>
+<script>
+  var dataSet = [
+    {
+      id: 1,
+      name: "Duong Quang Manh",
+      email: "manhdqph20768@fpt.edu.vn",
+      password: "12345678",
+      acd: "22/12/2020, 14:12:56",
+      status: true,
+      position: "Admin",
+    },
+    {
+      id: 2,
+      name: "Le Gia Tuan",
+      email: "tuanlgph20769@fpt.edu.vn",
+      password: "9876554321",
+      acd: "22/12/2020, 14:12:56",
+      status: true,
+      position: "Client",
+    },
+  ];
+
+  $(document).ready(function () {
+    var table = $("#example").DataTable({
+      data: dataSet,
+      columns: [
+        { title: "#", data: "id" },
+        { title: "Name", data: "name" },
+        { title: "Email", data: "email" },
+        { title: "Password", data: "password" },
+        { title: "Account creation date", data: "acd" },
+        {
+          title: "Status",
+          data: "status",
+          render: function (data, type, row) {
+            return data
+              ? "<span class='active text-success' >Active</span>"
+              : "<span class='inactive text-danger'>Inactive</span>";
+          },
+        },
+        { title: "Position", data: "position" },
+        {
+          title: "Actions",
+          render: function (data, type, row) {
+            var editButton =
+              "<button class='edit-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark' data-id='" +
+              row.id +
+              "'>Edit</button>";
+            var deleteButton =
+              "<button class='delete-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark'' data-id='" +
+              row.id +
+              "'>Delete</button>";
+            var detailsButton =
+              "<button class='details-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark'' data-id='" +
+              row.id +
+              "'>Details</button>";
+            return editButton + " " + deleteButton + " " + detailsButton;
+          },
+          orderable: false,
+        },
+      ],
+    });
+    $("#example").on("click", ".edit-button", function () {
+      var id = $(this).data("id");
+      // TODO: Xử lý logic khi click vào nút chỉnh sửa
+      console.log("Edit button clicked for row ID", id);
+    });
+
+    // Xử lý sự kiện khi click vào nút xóa
+    $("#example").on("click", ".delete-button", function () {
+      var id = $(this).data("id");
+      // TODO: Xử lý logic khi click vào nút xóa
+      console.log("Delete button clicked for row ID", id);
+    });
+
+    // Xử lý sự kiện khi click vào nút chi tiết
+    $("#example").on("click", ".details-button", function () {
+      var id = $(this).data("id");
+      // TODO: Xử lý logic khi click vào nút chi tiết
+      console.log("Details button clicked for row ID", id);
+    });
+    $("#filterBtn").click(function () {
+      var name = $("#name").val();
+      var position = $("#select").val();
+      var age = $("#ageInput").val();
+
+      console.log(name + "," + position);
+      // Thực hiện tìm kiếm với dữ liệu lọc
+      table.column(1).search(name).column(6).search(position).draw();
+    });
+  });
+</script>

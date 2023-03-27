@@ -1,0 +1,333 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
+/>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<%- include('./partials/header.ejs') %>
+<div style="min-height: 700px">
+  <div class="row" style="text-align: center; height: 100px; padding-top: 20px">
+    <h1>Product Management</h1>
+  </div>
+  <div class="row">
+    <div class="col-10" style="margin: 0 auto">
+      <div class="align-items-center">
+        <button
+          type="button"
+          class="btn btn-dark"
+          data-mdb-ripple-color="dark"
+          data-mdb-toggle="modal"
+          data-mdb-target="#add"
+        >
+          Add
+        </button>
+      </div>
+      <div class="form-outline mb-4" style="margin-top: 10px">
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="form-outline">
+              <input type="text" id="name" class="form-control" />
+              <label class="form-label" for="form10Example1">Name</label>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="col-12">
+              <label class="visually-hidden" for="inlineFormSelectPref"
+                >Category</label
+              >
+              <select class="select form-select" id="category">
+                <option value="">Category</option>
+                <option value="Thiết Bị Điện Tử">Thiết Bị Điện Tử</option>
+                <option value="Đồ Gỗ">Đồ Gỗ</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="col-12">
+              <label class="visually-hidden" for="inlineFormSelectPref"
+                >Status</label
+              >
+              <select class="select form-select" id="price">
+                <option value="">Price</option>
+                <option value="0 - 1000000">Dưới 1tr</option>
+                <option value="1000000 - 5000000">Từ 1tr - 5tr</option>
+                <option value="5000000 - 10000000">Từ 5tr - 10tr</option>
+                <option value="10000000 - 999999999">Từ 10tr trở lên</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <div class="col-12">
+              <button class="btn btn-dark" id="filterBtn">Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="datatable" style="margin-top: 10px">
+        <table
+          id="example"
+          class="display border table-bordered"
+          width="100%"
+        ></table>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="add"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add product</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- Name input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="form4Example1" class="form-control" />
+            <label class="form-label" for="form4Example1">Name</label>
+          </div>
+
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="form4Example1" class="form-control" />
+            <label class="form-label" for="form4Example1">Price</label>
+          </div>
+
+          <!-- Message input -->
+          <div class="form-outline mb-4">
+            <textarea
+              class="form-control"
+              id="form4Example3"
+              rows="4"
+            ></textarea>
+            <label class="form-label" for="form4Example3"
+              >Product Introduction</label
+            >
+          </div>
+
+          <div class="col-5">
+            <label class="visually-hidden" for="inlineFormSelectPref"
+              >Category</label
+            >
+            <select class="select form-select">
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+              <option value="4">Four</option>
+              <option value="5">Five</option>
+              <option value="6">Six</option>
+              <option value="7">Seven</option>
+              <option value="8">Eight</option>
+            </select>
+          </div>
+
+          <!-- Checkbox -->
+          <div style="margin-top: 10px">
+            <label class="form-label" for="customFile">Chọn ảnh</label>
+            <input type="file" class="form-control" id="customFile" />
+          </div>
+          <!-- Submit button -->
+          <div style="margin-top: 40px">
+            <button type="submit" class="btn btn-primary btn-block mb-4">
+              ADD
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal fade"
+  id="edits"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit product</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- Name input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="form4Example1" class="form-control" />
+            <label class="form-label" for="form4Example1">Name</label>
+          </div>
+
+          <!-- Email input -->
+          <div class="form-outline mb-4">
+            <input type="text" id="form4Example1" class="form-control" />
+            <label class="form-label" for="form4Example1">Price</label>
+          </div>
+
+          <!-- Message input -->
+          <div class="form-outline mb-4">
+            <textarea
+              class="form-control"
+              id="form4Example3"
+              rows="4"
+            ></textarea>
+            <label class="form-label" for="form4Example3"
+              >Product Introduction</label
+            >
+          </div>
+
+          <div class="col-5">
+            <label class="visually-hidden" for="inlineFormSelectPref"
+              >Category</label
+            >
+            <select class="select form-select">
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+              <option value="4">Four</option>
+              <option value="5">Five</option>
+              <option value="6">Six</option>
+              <option value="7">Seven</option>
+              <option value="8">Eight</option>
+            </select>
+          </div>
+
+          <!-- Checkbox -->
+          <div style="margin-top: 10px">
+            <label class="form-label" for="customFile">Chọn ảnh</label>
+            <input type="file" class="form-control" id="customFile" />
+          </div>
+          <!-- Submit button -->
+          <div style="margin-top: 40px">
+            <button type="submit" class="btn btn-primary btn-block mb-4">
+              EDIT
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('./partials/footer.ejs') %>
+<script>
+  var dataSet = [
+    {
+      id: 1,
+      name: "Quạt trần",
+      category: "Thiết Bị Điện Tử",
+      price: 2000000,
+      pi: "Xịn nhất thế giới",
+    },
+    {
+      id: 2,
+      name: "Tủ lạnh",
+      category: "Thiết Bị Điện Tử",
+      price: 22000000,
+      pi: "Đẹp nhất thế giới",
+    },
+    {
+      id: 3,
+      name: "Bộ bàn học",
+      category: "Đồ Gỗ",
+      price: 6000000,
+      pi: "Tiện ích nhất thế giới",
+    },
+    {
+      id: 4,
+      name: "Tivi",
+      category: "Thiết Bị Điện Tử",
+      price: 52000000,
+      pi: "To nhất thế giới",
+    },
+    {
+      id: 5,
+      name: "Bộ bàn ghế ăn",
+      category: "Đồ Gỗ",
+      price: 12000000,
+      pi: "Tiện ích nhất thế giới",
+    },
+  ];
+
+  $(document).ready(function () {
+    var table = $("#example").DataTable({
+      data: dataSet,
+      columns: [
+        { title: "#", data: "id" },
+        { title: "Name", data: "name" },
+        { title: "Category", data: "category" },
+        { title: "Price (vnđ)", data: "price" },
+        { title: "Product Introduction", data: "pi" },
+        {
+          title: "Actions",
+          render: function (data, type, row) {
+            var editButton =
+              "<button  data-mdb-toggle='modal' data-mdb-target='#edits' class='edit-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark' data-id='" +
+              row.id +
+              "'>Edit</button>";
+            var deleteButton =
+              "<button class='delete-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark'' data-id='" +
+              row.id +
+              "'>Delete</button>";
+            var detailsButton =
+              "<button class='details-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark'' data-id='" +
+              row.id +
+              "'>Details</button>";
+            return editButton + " " + deleteButton + " " + detailsButton;
+          },
+          orderable: false,
+        },
+      ],
+    });
+    $("#example").on("click", ".edit-button", function () {
+      var id = $(this).data("id");
+      // TODO: Xử lý logic khi click vào nút chỉnh sửa
+      console.log("Edit button clicked for row ID", id);
+    });
+
+    // Xử lý sự kiện khi click vào nút xóa
+    $("#example").on("click", ".delete-button", function () {
+      var id = $(this).data("id");
+      // TODO: Xử lý logic khi click vào nút xóa
+      console.log("Delete button clicked for row ID", id);
+    });
+
+    // Xử lý sự kiện khi click vào nút chi tiết
+    $("#example").on("click", ".details-button", function () {
+      var id = $(this).data("id");
+      // TODO: Xử lý logic khi click vào nút chi tiết
+      console.log("Details button clicked for row ID", id);
+    });
+    $("#filterBtn").click(function () {
+      var name = $("#name").val();
+      var category = $("#category").val();
+      var price = $("#price").val();
+
+      table
+        .column(1)
+        .search(name)
+        .column(2)
+        .search(category)
+        .column(3)
+        .search(price)
+        .draw();
+    });
+  });
+</script>
