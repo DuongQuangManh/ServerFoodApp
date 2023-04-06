@@ -4,11 +4,15 @@
 />
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
 <%- include('./partials/header.ejs') %>
 <div style="min-height: 700px">
   <div class="row" style="text-align: center; height: 100px; padding-top: 20px">
     <h1>User Management</h1>
   </div>
+  <% if (msg!=="") { %>
+  <div class="alert alert-success" role="alert" id="alertmsg"><%= msg %></div>
+  <% } %>
   <div class="row">
     <div class="col-10" style="margin: 0 auto">
       <div class="align-items-center">
@@ -17,64 +21,137 @@
           class="btn btn-dark"
           data-mdb-ripple-color="dark"
           data-mdb-toggle="modal"
-          data-mdb-target="#exampleModal"
+          data-mdb-target="#add"
         >
           Add
         </button>
       </div>
       <div class="form-outline mb-4" style="margin-top: 10px">
-        <div class="row g-3">
-          <div class="col-sm-6">
-            <div class="form-outline">
-              <input type="text" id="name" class="form-control" />
-              <label class="form-label" for="form10Example1">Name</label>
+        <form action="" method="get">
+          <div class="row g-3">
+            <div class="col-sm-6">
+              <div class="form-outline">
+                <input
+                  type="text"
+                  id="name"
+                  name="namefilter"
+                  class="form-control"
+                />
+                <label class="form-label" for="form10Example1">Last Name</label>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="col-12">
+                <label class="visually-hidden" for="inlineFormSelectPref"
+                  >Position</label
+                >
+                <select
+                  class="select form-select"
+                  id="position"
+                  name="positionfilter"
+                >
+                  <option value="">Position</option>
+                  <option value="true">Admin</option>
+                  <option value="false">Client</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="col-12">
+                <label class="visually-hidden" for="inlineFormSelectPref"
+                  >Status</label
+                >
+                <select
+                  class="select form-select"
+                  id="status"
+                  name="statusfilter"
+                >
+                  <option value="">Status</option>
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-2">
+              <div class="col-12">
+                <button type="submit" class="btn btn-dark" id="filterBtn">
+                  Filter
+                </button>
+              </div>
             </div>
           </div>
-          <div class="col-sm-2">
-            <div class="col-12">
-              <label class="visually-hidden" for="inlineFormSelectPref"
-                >Position</label
-              >
-              <select class="select form-select" id="position">
-                <option value="">Position</option>
-                <option value="Admin">Admin</option>
-                <option value="Client">Client</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="col-12">
-              <label class="visually-hidden" for="inlineFormSelectPref"
-                >Status</label
-              >
-              <select class="select form-select" id="status">
-                <option value="">Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-sm-2">
-            <div class="col-12">
-              <button class="btn btn-dark" id="filterBtn">Filter</button>
-            </div>
-          </div>
-        </div>
+        </form>
       </div>
 
       <div id="datatable" style="margin-top: 10px">
-        <table
-          id="example"
-          class="display border table-bordered"
-          width="100%"
-        ></table>
+        <table id="table" class="display border table-bordered" width="100%">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Account creation date</th>
+              <th>Status</th>
+              <th>Position</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% list.forEach((row) => { %>
+            <tr>
+              <td><%= row._id %></td>
+              <td>
+                <a href="/userdetail/<%= row._id  %>"
+                  ><%= row.firstname %> <%= row.lastname %></a
+                >
+              </td>
+              <td><%= row.email %></td>
+              <td><%= moment(row.createdAt).format('DD/MM/YYYY, HH:mm') %></td>
+              <td id="statustd">
+                <% if (row.status) {%> Active <% } else {%> Inactive<% } %>
+              </td>
+              <td>
+                <% if (row.position) {%> Admin <% } else {%> Client<% } %>
+              </td>
+              <td>
+                <button
+                  class="edit-button btn btn-link btn-rounded btn-sm fw-bold"
+                  data-mdb-ripple-color="dark"
+                  data-mdb-toggle="modal"
+                  data-mdb-target="#edits"
+                  onclick="handlerEdit('<%= row._id  %>',
+                  '<%= row.firstname  %>',
+                  '<%= row.lastname  %>',
+                  '<%= row.email  %>',
+                  '<%= row.password  %>',
+                  '<%= row.status  %>',
+                  '<%= row.position  %>',
+                  )"
+                >
+                  sửa
+                </button>
+                <button
+                  data-id="<%= row._id  %>"
+                  class="edit-button btn btn-link btn-rounded btn-sm fw-bold"
+                  data-mdb-ripple-color="dark"
+                  data-mdb-toggle="modal"
+                  data-mdb-target="#delete"
+                  onclick="handlerDelete('<%= row._id %>','<%= row.lastname %>')"
+                >
+                  xóa
+                </button>
+              </td>
+            </tr>
+            <%}); %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
 <div
   class="modal fade"
-  id="exampleModal"
+  id="add"
   tabindex="-1"
   aria-labelledby="exampleModalLabel"
   aria-hidden="true"
@@ -91,31 +168,53 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form method="post">
+          <input type="hidden" name="formsubmit" value="form1" />
+
           <!-- 2 column grid layout with text inputs for the first and last names -->
           <div class="row mb-4">
             <div class="col">
               <div class="form-outline">
-                <input type="text" id="form6Example1" class="form-control" />
+                <input
+                  type="text"
+                  id="form6Example1"
+                  name="firstname"
+                  class="form-control"
+                />
                 <label class="form-label" for="form6Example1">First name</label>
               </div>
             </div>
             <div class="col">
               <div class="form-outline">
-                <input type="text" id="form6Example2" class="form-control" />
+                <input
+                  type="text"
+                  id="form6Example2"
+                  name="lastname"
+                  class="form-control"
+                />
                 <label class="form-label" for="form6Example2">Last name</label>
               </div>
             </div>
           </div>
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input type="email" id="form6Example5" class="form-control" />
+            <input
+              type="email"
+              id="form6Example5"
+              name="email"
+              class="form-control"
+            />
             <label class="form-label" for="form6Example5">Email</label>
           </div>
 
           <!-- Number input -->
           <div class="form-outline mb-4">
-            <input type="number" id="form6Example6" class="form-control" />
+            <input
+              type="password"
+              id="form6Example6"
+              name="password"
+              class="form-control"
+            />
             <label class="form-label" for="form6Example6">Password</label>
           </div>
 
@@ -123,9 +222,9 @@
             <input
               class="form-check-input"
               type="radio"
-              name="inlineRadioOptions"
+              name="position"
               id="inlineRadio1"
-              value="option1"
+              value="Admin"
             />
             <label class="form-check-label" for="inlineRadio1">Admin</label>
           </div>
@@ -134,9 +233,10 @@
             <input
               class="form-check-input"
               type="radio"
-              name="inlineRadioOptions"
+              name="position"
               id="inlineRadio2"
-              value="option2"
+              value="Client"
+              checked
             />
             <label class="form-check-label" for="inlineRadio2">Client</label>
           </div>
@@ -149,7 +249,8 @@
               class="form-check-input me-2"
               type="checkbox"
               value=""
-              id="form6Example8"
+              name="status"
+              id="status"
               checked
             />
             <label class="form-check-label" for="form6Example8">
@@ -185,41 +286,69 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form>
-          <!-- 2 column grid layout with text inputs for the first and last names -->
+        <form method="post">
+          <input type="hidden" name="formsubmit" value="form2" />
+          <div class="form-outline mb-4">
+            <input
+              type="text"
+              id="idupdate"
+              name="idupdate"
+              class="form-control"
+              readonly
+            />
+            <label class="form-label" for="form6Example5">ID</label>
+          </div>
           <div class="row mb-4">
             <div class="col">
               <div class="form-outline">
-                <input type="text" id="form6Example1" class="form-control" />
+                <input
+                  type="text"
+                  id="firstnameupdate"
+                  name="firstnameupdate"
+                  class="form-control"
+                />
                 <label class="form-label" for="form6Example1">First name</label>
               </div>
             </div>
             <div class="col">
               <div class="form-outline">
-                <input type="text" id="form6Example2" class="form-control" />
+                <input
+                  type="text"
+                  id="lastnameupdate"
+                  name="lastnameupdate"
+                  class="form-control"
+                />
                 <label class="form-label" for="form6Example2">Last name</label>
               </div>
             </div>
           </div>
           <!-- Email input -->
           <div class="form-outline mb-4">
-            <input type="email" id="form6Example5" class="form-control" />
+            <input
+              type="email"
+              id="emailupdate"
+              name="emailupdate"
+              class="form-control"
+            />
             <label class="form-label" for="form6Example5">Email</label>
           </div>
 
           <!-- Number input -->
-          <div class="form-outline mb-4">
-            <input type="number" id="form6Example6" class="form-control" />
-            <label class="form-label" for="form6Example6">Password</label>
-          </div>
+          <input
+            type="hidden"
+            id="passwordupdate"
+            name="passwordupdate"
+            class="form-control"
+          />
 
           <div class="form-check form-check-inline">
             <input
               class="form-check-input"
               type="radio"
-              name="inlineRadioOptions"
-              id="inlineRadio1"
-              value="option1"
+              name="positionupdate"
+              id="adminupdate"
+              checked
+              value="Admin"
             />
             <label class="form-check-label" for="inlineRadio1">Admin</label>
           </div>
@@ -228,9 +357,9 @@
             <input
               class="form-check-input"
               type="radio"
-              name="inlineRadioOptions"
-              id="inlineRadio2"
-              value="option2"
+              name="positionupdate"
+              id="clientupdate"
+              value="Client"
             />
             <label class="form-check-label" for="inlineRadio2">Client</label>
           </div>
@@ -242,9 +371,8 @@
             <input
               class="form-check-input me-2"
               type="checkbox"
-              value=""
-              id="form6Example8"
-              checked
+              id="statusupdate"
+              name="statusupdate"
             />
             <label class="form-check-label" for="form6Example8">
               Active?
@@ -260,190 +388,85 @@
     </div>
   </div>
 </div>
+
+<div
+  class="modal fade"
+  id="delete"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="contentdlt"></div>
+      </div>
+      <form action="" method="post">
+        <input type="hidden" name="formsubmit" value="form3" />
+        <input type="hidden" id="iddelete" name="iddelete" />
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-mdb-dismiss="modal"
+          >
+            Close
+          </button>
+          <button type="submit" class="btn btn-primary">Delete</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 <%- include('./partials/footer.ejs') %>
+
 <script>
-  var dataSet = [
-    {
-      id: 1,
-      name: "Duong Quang Manh",
-      email: "manhdqph20768@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: true,
-      position: "Admin",
-    },
-    {
-      id: 2,
-      name: "Le Gia Tuan",
-      email: "tuanlgph20769@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: false,
-      position: "Client",
-    },
-    {
-      id: 3,
-      name: "Nguyen Van A",
-      email: "anv@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: false,
-      position: "Client",
-    },
-    {
-      id: 4,
-      name: "Khuat Van Khang",
-      email: "khangkv@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: true,
-      position: "Admin",
-    },
-    {
-      id: 5,
-      name: "Duong Quang Manh",
-      email: "manhdqph20768@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: true,
-      position: "Admin",
-    },
-    {
-      id: 6,
-      name: "Le Gia Tuan",
-      email: "tuanlgph20769@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: false,
-      position: "Client",
-    },
-    {
-      id: 7,
-      name: "Nguyen Van A",
-      email: "anv@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: false,
-      position: "Client",
-    },
-    {
-      id: 8,
-      name: "Khuat Van Khang",
-      email: "khangkv@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: true,
-      position: "Admin",
-    },
-    {
-      id: 9,
-      name: "Duong Quang Manh",
-      email: "manhdqph20768@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: true,
-      position: "Admin",
-    },
-    {
-      id: 10,
-      name: "Le Gia Tuan",
-      email: "tuanlgph20769@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: false,
-      position: "Client",
-    },
-    {
-      id: 11,
-      name: "Nguyen Van A",
-      email: "anv@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: false,
-      position: "Client",
-    },
-    {
-      id: 12,
-      name: "Khuat Van Khang",
-      email: "khangkv@fpt.edu.vn",
-      password: "12345678",
-      acd: "22/12/2020, 14:12:56",
-      status: true,
-      position: "Admin",
-    },
-  ];
-
   $(document).ready(function () {
-    var table = $("#example").DataTable({
-      data: dataSet,
-      columns: [
-        { title: "#", data: "id" },
-        { title: "Name", data: "name" },
-        { title: "Email", data: "email" },
-        { title: "Account creation date", data: "acd" },
-        {
-          title: "Status",
-          data: "status",
-          render: function (data, type, row) {
-            return data
-              ? "<span class='active text-success' >Active</span>"
-              : "<span class='inactive text-danger'>Inactive</span>";
-          },
-        },
-        { title: "Position", data: "position" },
-        {
-          title: "Actions",
-          render: function (data, type, row) {
-            var editButton =
-              "<button  data-mdb-toggle='modal' data-mdb-target='#edits' class='edit-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark' data-id='" +
-              row.id +
-              "'>Edit</button>";
-            var deleteButton =
-              "<button class='delete-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark'' data-id='" +
-              row.id +
-              "'>Delete</button>";
-            var detailsButton =
-              "<button class='details-button btn btn-link btn-rounded btn-sm fw-bold' data-mdb-ripple-color='dark'' data-id='" +
-              row.id +
-              "'>Details</button>";
-            return editButton + " " + deleteButton + " " + detailsButton;
-          },
-          orderable: false,
-        },
-      ],
-    });
-    $("#example").on("click", ".edit-button", function () {
-      var id = $(this).data("id");
-      // TODO: Xử lý logic khi click vào nút chỉnh sửa
-      console.log("Edit button clicked for row ID", id);
-    });
-
-    // Xử lý sự kiện khi click vào nút xóa
-    $("#example").on("click", ".delete-button", function () {
-      var id = $(this).data("id");
-      // TODO: Xử lý logic khi click vào nút xóa
-      console.log("Delete button clicked for row ID", id);
-    });
-
-    // Xử lý sự kiện khi click vào nút chi tiết
-    $("#example").on("click", ".details-button", function () {
-      var id = $(this).data("id");
-      // TODO: Xử lý logic khi click vào nút chi tiết
-      console.log("Details button clicked for row ID", id);
-    });
-    $("#filterBtn").click(function () {
-      var name = $("#name").val();
-      var position = $("#position").val();
-      var status = $("#status").val();
-
-      table
-        .column(1)
-        .search(name)
-        .column(6)
-        .search(position)
-        .column(5)
-        .search(status)
-        .draw();
+    $("#table").DataTable({
+      columnDefs: [{ orderable: false, targets: [6] }],
     });
   });
+  function handlerEdit(
+    id,
+    firstname,
+    lastname,
+    email,
+    password,
+    status,
+    position
+  ) {
+    console.log(typeof position + typeof status + "đây là position và status");
+    document.getElementById("idupdate").value = id;
+    document.getElementById("firstnameupdate").value = firstname;
+    document.getElementById("lastnameupdate").value = lastname;
+    document.getElementById("emailupdate").value = email;
+    document.getElementById("passwordupdate").value = password;
+    document.getElementById("statusupdate").checked =
+      status == "true" ? true : false;
+    if (position == "true") {
+      console.log("đây là admin");
+      document.getElementById("adminupdate").checked = true;
+    } else if (position == "false") {
+      console.log("đây là client");
+
+      document.getElementById("clientupdate").checked = true;
+    }
+  }
+  setTimeout(() => {
+    document.getElementById("alertmsg").style.display = "none";
+  }, 5000);
+  function handlerDelete(id, name) {
+    document.getElementById("contentdlt").innerHTML =
+      "Bạn có chắc chắn muốn xóa thông tin của " + name + " không ?";
+    document.getElementById("iddelete").value = id;
+  }
 </script>
