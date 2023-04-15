@@ -13,6 +13,7 @@ router.use((req, res, next) => {
     res.redirect("/formlogin");
   }
 });
+
 router.get("/", productsController.getList);
 
 router.post("/", uploader.single("fileimg"), productsController.addProduct);

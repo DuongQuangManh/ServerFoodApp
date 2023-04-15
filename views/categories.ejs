@@ -31,7 +31,6 @@
           <thead class="table-light">
             <tr>
               <th>ID</th>
-              <th>Code</th>
               <th>Name</th>
               <th>Actions</th>
             </tr>
@@ -40,7 +39,6 @@
             <% list.forEach((row) => { %>
             <tr>
               <td><%= row._id %></td>
-              <td><%= row.code %></td>
               <td><%= row.name %></td>
               <td>
                 <button
@@ -48,7 +46,7 @@
                   data-mdb-ripple-color="dark"
                   data-mdb-toggle="modal"
                   data-mdb-target="#edits"
-                  onclick="handlerEdit('<%= row._id%>','<%= row.code%>','<%= row.name%>')"
+                  onclick="handlerEdit('<%= row._id%>','<%= row.name%>')"
                 >
                   sửa
                 </button>
@@ -91,12 +89,6 @@
       <div class="modal-body">
         <form method="post">
           <input type="hidden" name="formsubmit" value="form1" />
-
-          <!-- Name input -->
-          <div class="form-outline mb-4">
-            <input type="text" name="code" class="form-control" />
-            <label class="form-label" for="form5Example1">Code</label>
-          </div>
 
           <div class="form-outline mb-4">
             <input type="text" name="name" class="form-control" />
@@ -143,16 +135,6 @@
               readonly
             />
             <label class="form-label" for="form5Example1">ID</label>
-          </div>
-
-          <div class="form-outline mb-4">
-            <input
-              type="text"
-              id="codeupdate"
-              class="form-control"
-              name="codeupdate"
-            />
-            <label class="form-label" for="form5Example1">Code</label>
           </div>
 
           <div class="form-outline mb-4">
@@ -219,12 +201,11 @@
 <script>
   $(document).ready(function () {
     $("#table").DataTable({
-      columnDefs: [{ orderable: false, targets: [3] }],
+      columnDefs: [{ orderable: false, targets: [2] }],
     });
   });
-  function handlerEdit(id, code, name) {
+  function handlerEdit(id, name) {
     document.getElementById("idupdate").value = id;
-    document.getElementById("codeupdate").value = code;
     document.getElementById("nameupdate").value = name;
   }
   setTimeout(() => {

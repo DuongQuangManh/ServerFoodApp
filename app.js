@@ -5,6 +5,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var expressLayouts = require("express-ejs-layouts");
 var session = require("express-session");
+
 // var db = require("./config/db");
 // db.mongoose;
 
@@ -16,6 +17,7 @@ var categoriesRouter = require("./routes/categories");
 var productsRouter = require("./routes/products");
 var detailRouter = require("./routes/userdetail");
 var prodcutDetailRouter = require("./routes/productdetail");
+var apiRouter = require("./routes/api");
 
 var app = express();
 app.use(expressLayouts);
@@ -47,6 +49,7 @@ app.use("/categories", categoriesRouter);
 app.use("/products", productsRouter);
 app.use("/userdetail", detailRouter);
 app.use("/productdetail", prodcutDetailRouter);
+app.use("/api", apiRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -61,7 +64,14 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  if (req.originalUrl.indexOf("/api") == 0) {
+    res.json({
+      status: err.status,
+      msg: err.message,
+    });
+  } else {
+    res.render("error");
+  }
 });
 
 module.exports = app;

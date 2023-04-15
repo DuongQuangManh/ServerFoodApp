@@ -1,6 +1,7 @@
 var model = require("../models/user.model");
 
 exports.login = (req, res, next) => {
+  req.session.userLogin = null;
   res.render("login", { layout: "../views/layouts/layout", title: "Manager" });
 };
 

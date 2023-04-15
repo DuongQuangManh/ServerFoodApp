@@ -9,6 +9,7 @@ router.use((req, res, next) => {
     res.redirect("/formlogin");
   }
 });
+
 router.get("/", usersController.getList);
 router.post("/", usersController.addUser);
 

@@ -2,7 +2,6 @@ var db = require("../config/db");
 
 var Category = new db.mongoose.Schema(
   {
-    code: { type: String, default: "Không có mã" },
     name: { type: String, default: "Không có tên" },
     id_sanpham: { type: db.mongoose.Schema.Types.ObjectId, ref: "pro" },
   },

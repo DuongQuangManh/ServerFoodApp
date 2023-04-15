@@ -2,6 +2,7 @@ var model = require("../models/product.model");
 var modelTl = require("../models/category.model");
 var moment = require("moment");
 var fs = require("fs");
+
 exports.getList = async (req, res) => {
   const name = req.query.namefilter; // lấy giá trị tên từ tham số truyền lên
   const category = req.query.categoryfilter; // lấy giá trị chức vụ từ tham số truyền lên
@@ -54,7 +55,7 @@ exports.addProduct = async (req, res) => {
     console.log(req.body);
     try {
       fs.renameSync(req.file.path, "./public/images/" + req.file.originalname);
-      url = "http://localhost:3000/images/" + req.file.originalname;
+      url = req.file.originalname;
 
       console.log("url: http://localhost:3000/images/" + req.file.originalname);
     } catch (error) {

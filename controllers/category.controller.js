@@ -20,7 +20,6 @@ exports.add = async (req, res) => {
   if (req.body.formsubmit == "form1") {
     if (req.method == "POST") {
       let obj = new model.cate();
-      obj.code = req.body.code;
       obj.name = req.body.name;
 
       try {
@@ -38,7 +37,6 @@ exports.add = async (req, res) => {
     let id = req.body.idupdate;
     if (req.method == "POST") {
       let objupdate = new model.cate();
-      objupdate.code = req.body.codeupdate;
       objupdate.name = req.body.nameupdate;
       objupdate._id = id;
 
