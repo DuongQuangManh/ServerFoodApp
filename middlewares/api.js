@@ -7,6 +7,7 @@ const api_auth = async (req, res, next) => {
   let header_token = req.header("Authorization");
 
   if (typeof header_token == "undefined") {
+    console.log("đã bị bắt vì k có token");
     return res.status(403).json({ msg: "Không xác định token" });
   }
 
@@ -17,6 +18,8 @@ const api_auth = async (req, res, next) => {
     console.log(data);
     const user = await model.user.findOne({ _id: data._id, token: token });
     if (!user) {
+      console.log("đã bị bắt vì k có k xác định được người dùng");
+
       throw new Error("Không xác định được người dùng");
     }
     req.user = user;
@@ -24,6 +27,8 @@ const api_auth = async (req, res, next) => {
     next();
   } catch (error) {
     console.log(error);
+    console.log("đã bị bắt vì k có nhảy vào catch");
+
     res.status(401).send({ error: error.message });
   }
 };

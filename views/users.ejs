@@ -91,6 +91,8 @@
               <th>Name</th>
               <th>Email</th>
               <th>Account creation date</th>
+              <th>Address</th>
+              <th>Phone</th>
               <th>Status</th>
               <th>Position</th>
               <th>Actions</th>
@@ -107,6 +109,8 @@
               </td>
               <td><%= row.email %></td>
               <td><%= moment(row.createdAt).format('DD/MM/YYYY, HH:mm') %></td>
+              <td><%= row.address %></td>
+              <td><%= row.phone %></td>
               <td id="statustd">
                 <% if (row.status) {%> Active <% } else {%> Inactive<% } %>
               </td>

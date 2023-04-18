@@ -32,7 +32,9 @@ exports.getList = async (req, res) => {
   }
 
   let msg = "";
-  let dataSet = await model.pro.find(query).populate("id_theloai");
+  let dataSet = await model.pro
+    .find(query)
+    .populate(["id_theloai", "id_cuahang"]);
   let listTl = await modelTl.cate.find();
   res.render("./products", {
     layout: "../views/layouts/layout",
@@ -51,8 +53,6 @@ exports.addProduct = async (req, res) => {
   let msg = "";
 
   if (req.method == "POST") {
-    console.log(req.file);
-    console.log(req.body);
     try {
       fs.renameSync(req.file.path, "./public/images/" + req.file.originalname);
       url = req.file.originalname;
@@ -67,7 +67,6 @@ exports.addProduct = async (req, res) => {
 
   console.log(url + "đây là url ảnh");
   if (formType === "form1") {
-    console.log("add");
     if (req.method == "POST") {
       let obj = new model.pro();
       obj.name = req.body.name;
@@ -122,7 +121,7 @@ exports.addProduct = async (req, res) => {
     }
   }
 
-  let dataSet = await model.pro.find().populate("id_theloai");
+  let dataSet = await model.pro.find().populate(["id_theloai", "id_cuahang"]);
   res.render("./products", {
     layout: "../views/layouts/layout",
     title: "Product Management",

@@ -3,7 +3,11 @@ var model = require("../../models/product.model");
 // food  litmit 5
 exports.products = async (req, res, next) => {
   try {
-    let data = await model.pro.find().populate("id_theloai").sort({ price: 1 });
+    let data = await model.pro
+      .find()
+      .populate(["id_theloai", "id_cuahang"])
+      .sort({ price: 1 });
+
     res.status(200).json({ data: data, msg: "Lấy dữ liệu thành công" });
     return;
   } catch (error) {
@@ -20,10 +24,9 @@ exports.searchProduct = async (req, res, next) => {
     query.name = { $regex: req.body.name, $options: "i" };
   }
   try {
-    let data = await model.pro.find(query).populate("id_theloai");
-    console.log("---------day la data--------");
-    console.log(data);
-    console.log("----------het---------");
+    let data = await model.pro
+      .find(query)
+      .populate(["id_theloai", "id_cuahang"]);
     return res.status(200).json({ data: data, msg: "Lấy dữ liệu thành công" });
   } catch (error) {
     if (error) {
@@ -35,7 +38,9 @@ exports.searchProduct = async (req, res, next) => {
 exports.detailProduct = async (req, res, next) => {
   let id = req.params.id;
   try {
-    let data = await model.pro.findOne({ _id: id }).populate("id_theloai");
+    let data = await model.pro
+      .findOne({ _id: id })
+      .populate(["id_theloai", "id_cuahang"]);
     return res.status(200).json({ data: data, msg: "Lấy dữ liệu thành công" });
   } catch (error) {
     if (error) {
