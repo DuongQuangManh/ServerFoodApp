@@ -12,7 +12,6 @@ var User = new db.mongoose.Schema(
     email: { type: String, default: "Không có email" },
     passwd: { type: String, required: true },
     status: { type: Boolean, default: true },
-    address: { type: String, default: "Chưa cập nhật" },
     phone: { type: String, default: "Chưa cập nhật" },
     position: { type: Boolean, default: false },
     img: { type: String, required: false },

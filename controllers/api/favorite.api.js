@@ -3,8 +3,8 @@ var model = require("../../models/favorite.model");
 // food  litmit 5
 exports.favorite = async (req, res, next) => {
   let query = {};
-  if (req.query.id) {
-    query.id_user = req.query.id;
+  if (req.params.id) {
+    query.id_user = req.params.id;
   }
   console.log(query);
 

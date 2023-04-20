@@ -50,12 +50,8 @@ exports.login = async (req, res, next) => {
     // đăng nhập thành công, tạo token làm việc mới
 
     const token = await user.generateAuthToken();
-    console.log("-----------------------------");
-    console.log(req.user);
-    console.log("-----------------------------");
     console.log(user);
-
-    return res.status(200).json({ user, token });
+    return res.status(200).json({ data: user, token: token });
   } catch (error) {
     console.log(error);
     return res.status(400).json({ msg: error.message });
@@ -71,13 +67,11 @@ exports.profile = (req, res, next) => {
 };
 
 exports.update = async (req, res, next) => {
-  let id = req.params.iduser;
-  let url = "";
+  let id = req.params.id;
   console.log(id);
-  console.log(req.body.firstname);
-  console.log(req.body.lastname);
-  console.log(req.file);
+  let url = "";
   if (req.method == "POST" && req.file) {
+    console.log("ddax vafo file img");
     const userFolderPath = path.join(__dirname, "../../public/uploads", id);
 
     if (!fs.existsSync(userFolderPath)) {
@@ -101,15 +95,22 @@ exports.update = async (req, res, next) => {
     obj.firstname = req.body.firstname;
     obj.lastname = req.body.lastname;
     obj.email = req.body.email;
+    obj.phone = req.body.phone;
     if (req.file) {
+      console.log("dda xet img");
       obj.img = url;
+    } else {
+      console.log("meo set img");
     }
     obj._id = id;
     try {
       await model.user.findByIdAndUpdate(id, obj);
-      return res.status(200).json({ msg: "update thành công" });
+      const data = await model.user.findOne({ _id: id });
+
+      return res.status(200).json({ data: data, msg: "update thành công" });
     } catch (err) {
       if (err) {
+        console.log(err.message);
         return res.status(400).json({ msg: "Không lấy được dữ liệu" });
       }
     }

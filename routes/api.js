@@ -10,15 +10,16 @@ var apiCateCtrl = require("../controllers/api/category.api");
 var apiFavoCtrl = require("../controllers/api/favorite.api");
 var apiCartCtrl = require("../controllers/api/cart.api");
 var apiStoreCtrl = require("../controllers/api/store.api");
+var apiAddressCtrl = require("../controllers/api/address.api");
 // users
 router.get("/users", mdw.api_auth, apiUserCtrl.listUser);
-router.post("/users", apiUserCtrl.reg);
+router.post("/users/reg", apiUserCtrl.reg);
 router.post("/users/login", apiUserCtrl.login);
 router.get("/users/logout", mdw.api_auth, apiUserCtrl.logout);
-router.post("/users/:iduser", uploader.single("image"), apiUserCtrl.update);
 router.post("/users/changepass/:iduser", apiUserCtrl.changepass);
 router.get("/users/profile", mdw.api_auth, apiUserCtrl.profile);
 
+router.post("/users/update/:id", uploader.single("image"), apiUserCtrl.update);
 //products
 router.get("/products", apiProCtrl.products);
 
@@ -36,5 +37,8 @@ router.post("/carts/add", mdw.api_auth, apiCartCtrl.add);
 router.post("/carts/edit", mdw.api_auth, apiCartCtrl.edit);
 
 router.get("/stores", apiStoreCtrl.stores);
+
+router.get("/address/:id", apiAddressCtrl.address);
+router.post("/address/add", mdw.api_auth, apiAddressCtrl.add);
 
 module.exports = router;
