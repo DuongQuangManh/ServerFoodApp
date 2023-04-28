@@ -5,7 +5,16 @@ exports.getList = async (req, res, next) => {
     query.id_user = req.params.id;
   }
   try {
-    let data = await model.cart.find(query).populate(["id_user", "id_product"]);
+    let data = await model.cart
+      .find(query)
+      .populate(["id_user", "id_product"])
+      .populate({
+        path: "id_product.id_cuahang",
+        populate: {
+          path: "id_cuahang",
+          model: "store",
+        },
+      });
     if (data) {
       res.status(200).json({ data: data, msg: "Get data success" });
     }
@@ -44,4 +53,19 @@ exports.add = async (req, res, next) => {
   }
 };
 
-exports.edit = async (req, res, next) => {};
+exports.clear = async (req, res, next) => {
+  console.log(req.body.id_user);
+  try {
+    if (req.method == "POST") {
+      const a = await model.cart.deleteMany({
+        id_user: req.body.id_user,
+      });
+      return res.status(200).json({ data: [], msg: "Thành công" });
+    }
+  } catch (err) {
+    if (err) {
+      console.log(err.message);
+      return res.status(400).json({ msg: "Lỗi" });
+    }
+  }
+};

@@ -6,7 +6,7 @@ exports.address = async (req, res, next) => {
   if (req.params.id) {
     query.id_user = id;
   }
-  let data = await model.address.find(query);
+  let data = await model.address.find(query).populate("id_user");
   return res.status(200).json({ data: data, msg: "lây thành công" });
 };
 
@@ -24,7 +24,7 @@ exports.add = async (req, res, next) => {
         let data = await model.address.find({ id_user: req.body.id_user });
         res.status(201).json({ data: data, msg: "Thêm địa chỉ thành công" });
       } else {
-        res.status(400).json({ data: data, msg: "Thêm địa chỉ thất bại" });
+        res.status(400).json({ msg: "Thêm địa chỉ thất bại" });
       }
     } catch (err) {
       if (err) {
