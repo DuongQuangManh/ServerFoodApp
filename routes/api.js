@@ -38,6 +38,7 @@ router.post("/favorites/delete", mdw.api_auth, apiFavoCtrl.deleteFavorite);
 router.get("/carts/:id", apiCartCtrl.getList);
 router.post("/carts/add", mdw.api_auth, apiCartCtrl.add);
 router.post("/carts/clear", mdw.api_auth, apiCartCtrl.clear);
+router.post("/carts/delete", mdw.api_auth, apiCartCtrl.delete);
 
 //stores
 router.get("/stores", apiStoreCtrl.stores);

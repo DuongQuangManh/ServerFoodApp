@@ -4,6 +4,7 @@ require("dotenv").config(); // su dung thu vien doc file env
 const chuoi_ky_tu_bi_mat = process.env.TOKEN_SEC_KEY;
 
 const api_auth = async (req, res, next) => {
+  console.log("co vao check token");
   let header_token = req.header("Authorization");
 
   if (typeof header_token == "undefined") {

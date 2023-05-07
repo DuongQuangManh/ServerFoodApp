@@ -9,14 +9,14 @@ exports.getList = async (req, res, next) => {
       .find(query)
       .populate(["id_user", "id_product"])
       .populate({
-        path: "id_product.id_cuahang",
+        path: "id_product",
         populate: {
           path: "id_cuahang",
           model: "store",
         },
       });
     if (data) {
-      res.status(200).json({ data: data, msg: "Get data success" });
+      return res.status(200).json({ data: data, msg: "Get data success" });
     }
   } catch (err) {
     if (err) {
@@ -40,14 +40,21 @@ exports.add = async (req, res, next) => {
       if (st) {
         let data = await model.cart
           .find({ id_user: req.body.id_user })
-          .populate(["id_user", "id_product"]);
-        res.status(201).json({ data: data, msg: "Thêm thành công" });
+          .populate(["id_user", "id_product"])
+          .populate({
+            path: "id_product",
+            populate: {
+              path: "id_cuahang",
+              model: "store",
+            },
+          });
+        return res.status(201).json({ data: data, msg: "Thêm thành công" });
       } else {
-        res.status(404).json({ msg: "Phiên hết hạn" });
+        return res.status(404).json({ msg: "Phiên hết hạn" });
       }
     } catch (err) {
       if (err) {
-        res.status(400).json({ msg: err.message });
+        return res.status(400).json({ msg: err.message });
       }
     }
   }
@@ -66,6 +73,40 @@ exports.clear = async (req, res, next) => {
     if (err) {
       console.log(err.message);
       return res.status(400).json({ msg: "Lỗi" });
+    }
+  }
+};
+
+exports.delete = async (req, res, next) => {
+  const query = {
+    _id: req.body.id,
+    id_user: req.body.id_user,
+  };
+  console.log(query);
+  if (req.method == "POST") {
+    try {
+      const a = await model.cart.deleteOne(query);
+      if (a) {
+        let data = await model.cart
+          .find({ id_user: req.body.id_user })
+          .populate(["id_user", "id_product"])
+          .populate({
+            path: "id_product",
+            populate: {
+              path: "id_cuahang",
+              model: "store",
+            },
+          });
+        return res.status(200).json({ data: data, msg: "Thêm thành công" });
+      } else {
+        console.log("abc");
+        return res.status(404).json({ msg: "Phiên hết hạn" });
+      }
+    } catch (err) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({ msg: err.message });
+      }
     }
   }
 };
