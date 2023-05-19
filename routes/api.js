@@ -12,6 +12,7 @@ var apiCartCtrl = require("../controllers/api/cart.api");
 var apiStoreCtrl = require("../controllers/api/store.api");
 var apiAddressCtrl = require("../controllers/api/address.api");
 var apiOrderDetailCtrl = require("../controllers/api/orderdetail.api");
+var apiCommentCtrl = require("../controllers/api/comment.api");
 
 // users
 router.get("/users", mdw.api_auth, apiUserCtrl.listUser);
@@ -50,4 +51,9 @@ router.post("/address/add", mdw.api_auth, apiAddressCtrl.add);
 // orderdetails
 router.get("/orderdetails/:id", apiOrderDetailCtrl.getList);
 router.post("/orderdetails/add", apiOrderDetailCtrl.add);
+
+//comments
+router.get("/comments", apiCommentCtrl.get);
+router.post("/comments/add", mdw.api_auth, apiCommentCtrl.add);
+
 module.exports = router;
