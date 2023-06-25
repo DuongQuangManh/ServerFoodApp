@@ -2,6 +2,7 @@ var model = require("../../models/user.model");
 const bcrypt = require("bcrypt");
 var fs = require("fs");
 var path = require("path");
+const { use } = require("../../routes/api");
 exports.listUser = async (req, res, next) => {
   try {
     let data = await model.user.find();
@@ -122,39 +123,31 @@ exports.changepass = async (req, res, next) => {
   console.log("đây là changepass ");
   let txtcrpass = req.body.crpass;
   let txtnewpass = req.body.newpass;
-  let txtnewpass2 = req.body.newpass2;
   console.log("-----------hihi");
   console.log(id);
   console.log(req.body);
   console.log("----kết");
 
-  // if (req.method == "POST") {
-  //   const user = await model.user.findOne({ _id: id });
-  //   console.log(user);
-  //   const isPasswordMatch = await bcrypt.compare(txtcrpass, user.passwd);
-  //   if (!isPasswordMatch) {
-  //     console.log("sai pas");
-  //     return res.status(401).json({ msg: "Mật khẩu không chính xác" });
-  //   }
-
-  //   if (txtnewpass !== txtnewpass2) {
-  //     console.log("sai khớp");
-
-  //     return res.status(403).json({ msg: "Mật khẩu không trùng khớp" });
-  //   }
-  //   const salt = await bcrypt.genSalt(10);
-  //   let obj = new model.user();
-  //   obj.passwd = await bcrypt.hash(req.body.newpass, salt);
-  //   obj._id = id;
-  //   try {
-  //     await model.user.findByIdAndUpdate(id, obj);
-  //     return res.status(200).json({ msg: "update thành công" });
-  //   } catch (err) {
-  //     if (err) {
-  //       return res.status(400).json({ msg: "Không lấy được dữ liệu" });
-  //     }
-  //   }
-  // }
+  if (req.method == "POST") {
+    try {
+      const user = await model.user.findOne({ _id: id });
+      console.log(user);
+      const isPasswordMatch = await bcrypt.compare(txtcrpass, user.passwd);
+      if (!isPasswordMatch) {
+        console.log("sai pas");
+        return res.status(401).json({ msg: "Mật khẩu không chính xác" });
+      }
+      const salt = await bcrypt.genSalt(10);
+      user.passwd = await bcrypt.hash(txtnewpass, salt);
+      await user.save();
+      return res.status(200).json({ msg: "Đổi mật khẩu thành công" });
+    } catch (err) {
+      if (err) {
+        console.log("có vào catch nhé");
+        return res.status(400).json({ msg: "Không lấy được dữ liệu" });
+      }
+    }
+  }
 };
 exports.logout = async (req, res, next) => {
   try {
