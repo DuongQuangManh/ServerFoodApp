@@ -21,7 +21,9 @@ exports.add = async (req, res, next) => {
       const a = await obj.save();
 
       if (a) {
-        let data = await model.address.find({ id_user: req.body.id_user });
+        let data = await model.address
+          .find({ id_user: req.body.id_user })
+          .populate("id_user");
         res.status(201).json({ data: data, msg: "Thêm địa chỉ thành công" });
       } else {
         res.status(400).json({ msg: "Thêm địa chỉ thất bại" });
