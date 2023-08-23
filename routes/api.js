@@ -24,7 +24,7 @@ router.get("/users/profile", mdw.api_auth, apiUserCtrl.profile);
 
 router.post("/users/update/:id", uploader.single("image"), apiUserCtrl.update);
 //products
-router.get("/products", apiProCtrl.products);
+router.get("/products/:idtheloai", apiProCtrl.products);
 
 router.post("/products/search", apiProCtrl.searchProduct);
 router.get("/products/:id", apiProCtrl.detailProduct);

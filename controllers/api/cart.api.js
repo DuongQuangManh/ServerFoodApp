@@ -33,7 +33,7 @@ exports.add = async (req, res, next) => {
     obj.id_user = req.body.id_user;
     obj.id_product = req.body.id_product;
     obj.quantity = req.body.quantity;
-
+    console.log(obj)
     try {
       const st = await obj.save();
       console.log(st);
@@ -97,7 +97,7 @@ exports.delete = async (req, res, next) => {
               model: "store",
             },
           });
-        return res.status(200).json({ data: data, msg: "Thêm thành công" });
+        return res.status(200).json({ data: data, msg: "Xóa thành công" });
       } else {
         console.log("abc");
         return res.status(404).json({ msg: "Phiên hết hạn" });

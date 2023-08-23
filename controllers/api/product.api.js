@@ -2,14 +2,15 @@ var model = require("../../models/product.model");
 
 // food  litmit 5
 exports.products = async (req, res, next) => {
+  const limit = parseInt(req.query.limit)||5;
+  const theloai = req.params.idtheloai;
   try {
+    const count = await model.pro.countDocuments({id_theloai:theloai});
     let data = await model.pro
-      .find()
+      .find({id_theloai:theloai})
       .populate(["id_theloai", "id_cuahang"])
-      .sort({ price: 1 });
-
-    res.status(200).json({ data: data, msg: "Lấy dữ liệu thành công" });
-    return;
+      .limit(limit);
+    return res.status(200).json({ data: data,count:count, msg: "Lấy dữ liệu thành công" });
   } catch (error) {
     if (error) {
       console.log(error.message);

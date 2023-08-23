@@ -40,6 +40,7 @@ exports.reg = async (req, res, next) => {
 };
 
 exports.login = async (req, res, next) => {
+  console.log(req.body)
   try {
     const user = await model.user.findByCredentials(
       req.body.email,
@@ -54,7 +55,7 @@ exports.login = async (req, res, next) => {
     console.log(user);
     return res.status(200).json({ data: user, token: token });
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
     return res.status(400).json({ msg: error.message });
   }
 };
@@ -140,7 +141,7 @@ exports.changepass = async (req, res, next) => {
       const salt = await bcrypt.genSalt(10);
       user.passwd = await bcrypt.hash(txtnewpass, salt);
       await user.save();
-      return res.status(200).json({ msg: "Đổi mật khẩu thành công" });
+      return res.status(201).json({ msg: "Đổi mật khẩu thành công",data:true });
     } catch (err) {
       if (err) {
         console.log("có vào catch nhé");

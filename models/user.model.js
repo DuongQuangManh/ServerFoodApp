@@ -38,11 +38,14 @@ User.methods.generateAuthToken = async function () {
 
 User.statics.findByCredentials = async (email, passwd) => {
   const user1 = await user.findOne({ email: email });
+  console.log(user1)
   if (!user1) {
+    console.log("Không tồn tại user")
     throw new Error({ error: "Không tồn tại user" });
   }
   const isPasswordMatch = await bcrypt.compare(passwd, user1.passwd);
   if (!isPasswordMatch) {
+    console.log("Sai password" )
     throw new Error({ error: "Sai password" });
   }
   return user1;
