@@ -4,10 +4,11 @@ var model = require("../../models/product.model");
 exports.products = async (req, res, next) => {
   const limit = parseInt(req.query.limit)||5;
   const theloai = req.params.idtheloai;
+  const start = parseInt(req.query.start) || 0;
   try {
     const count = await model.pro.countDocuments({id_theloai:theloai});
     let data = await model.pro
-      .find({id_theloai:theloai})
+      .find({id_theloai:theloai}).skip(start)
       .populate(["id_theloai", "id_cuahang"])
       .limit(limit);
     return res.status(200).json({ data: data,count:count, msg: "Lấy dữ liệu thành công" });
@@ -22,11 +23,12 @@ exports.products = async (req, res, next) => {
 exports.searchProduct = async (req, res, next) => {
   console.log("đây là query search")
   console.log(req.query.name);
+  const start = parseInt(req.query.start) || 0;
   const limit = parseInt(req.query.limit) || 5;
   try {
     const count = await model.pro.countDocuments({name: { $regex: req.query.name, $options: "i" }});
     let data = await model.pro
-      .find({name: { $regex: req.query.name, $options: "i" }})
+      .find({name: { $regex: req.query.name, $options: "i" }}).skip(start)
       .populate(["id_theloai", "id_cuahang"]).limit(limit);
     return res.status(200).json({ data: data,count:count, msg: "Lấy dữ liệu thành công" });
   } catch (error) {
